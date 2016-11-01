@@ -1,0 +1,17 @@
+{
+    "name": "prowect/drips-core",
+    "description": "Drips PHP-Framework",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Raffael Kessler",
+            "email": "raffael.kessler@prowect.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Prowect\\Drips\\": "src"
+        }
+    }
+}
