@@ -4,6 +4,10 @@ namespace Prowect\Drips\Debug;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as IlluminateHandler;
+use Symfony\Component\Debug\Exception\FlattenException;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
+
 
 class ExceptionHandler extends IlluminateHandler
 {
@@ -60,5 +64,22 @@ class ExceptionHandler extends IlluminateHandler
         }
 
         return redirect()->guest('login');
+    }
+
+    protected function convertExceptionToResponse(Exception $e)
+    {
+        $e = FlattenException::create($e);
+
+        if(config('app.debug')) {
+            ob_start();
+            require_once __DIR__ . '/resources/debugger.phtml';
+            $html = ob_get_contents();
+            ob_end_clean();
+        } else {
+            // TODO: Error-Handling!
+            $html = 'An error occured!';
+        }
+
+        return SymfonyResponse::create($html, $e->getStatusCode(), $e->getHeaders());
     }
 }
